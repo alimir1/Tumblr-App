@@ -13,7 +13,6 @@ class PhotosViewController: UIViewController {
     
     var posts: [NSDictionary] = []
     @IBOutlet var tableView: UITableView!
-    var isLoadingMoreData = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,7 +84,6 @@ class PhotosViewController: UIViewController {
                         let responseFieldDictionary = responseDictionary["response"] as! NSDictionary
                         
                         // This is where you will store the returned array of posts in your posts property
-                        self.isLoadingMoreData = false
                         
                         for post in responseFieldDictionary["posts"] as! [NSDictionary] {
                             self.posts.append(post)
@@ -93,6 +91,7 @@ class PhotosViewController: UIViewController {
                         
                         self.tableView.refreshControl?.endRefreshing()
                         self.tableView.reloadData()
+                        
                     }
                 }
         });
@@ -135,16 +134,6 @@ class PhotosViewController: UIViewController {
             }
             
             
-        }
-    }
-}
-
-extension PhotosViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard !isLoadingMoreData else { return }
-        if scrollView.contentOffset.y > scrollView.contentSize.height - tableView.bounds.height {
-            loadMoreData()
-            isLoadingMoreData = true
         }
     }
 }
@@ -208,10 +197,5 @@ extension PhotosViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 }
-
-
-
-
-
 
 
